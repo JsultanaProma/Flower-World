@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🌷Blossom🌷 • Bloom Your Mood</title>
+  <meta name="description" content="A big, vibrant, mood-lifting flower website built with Bootstrap 5, HTML, CSS, and JavaScript — single file template." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <!-- AOS for subtle animations -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg: #fff9fc;
+      --bg-2: #fff;
+      --text: #222;
+      --muted: #6b7280;
+      --primary: #e91e63; /* rose */
+      --primary-2: #9c27b0; /* orchid */
+      --accent: #ffb6c1; /* lightpink */
+      --leaf: #3aa76d;
+      --shadow: 0 10px 30px rgba(233,30,99,.20);
+      --radius: 1.25rem;
+    }
+    [data-theme="dark"]{
+      --bg: #0f0a0d;
+      --bg-2: #18111a;
+      --text: #f3f4f6;
+      --muted: #cbd5e1;
+      --primary: #ff4d89;
+      --primary-2: #b37ee6;
+      --accent: #ff8fb1;
+      --leaf: #69d39e;
+      --shadow: 0 10px 30px rgba(255,77,137,.25);
+    }
+    html, body{height:100%;}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      scroll-behavior:smooth;
+    }
+    .brand{font-family: "Playfair Display", serif; letter-spacing:.5px}
+    .btn-rose{background:var(--primary); color:white; border:none; border-radius:999px; padding:.8rem 1.2rem; box-shadow:var(--shadow)}
+    .btn-rose:hover{filter:brightness(.95)}
+    .section{padding:90px 0}
+    .card{border:0; border-radius:var(--radius); background:var(--bg-2); box-shadow:var(--shadow)}
+    .hero{
+      background: radial-gradient(1200px 500px at 10% 10%, rgba(255,182,193,.25), transparent 60%),
+                  radial-gradient(1000px 600px at 90% 30%, rgba(156,39,176,.12), transparent 60%),
+                  linear-gradient(180deg, var(--bg), var(--bg));
+      position:relative;
+      overflow:hidden;
+    }
+    /* Floating petals */
+    .petal{position:absolute; width:16px; height:22px; background:var(--accent); border-radius:12px 12px 0 12px; transform:rotate(25deg); opacity:.75; filter:blur(.2px); animation:float 14s linear infinite;}
+    @keyframes float{0%{transform:translateY(-10vh) rotate(15deg)}100%{transform:translateY(110vh) rotate(375deg)}}
+    .petal:nth-child(2){left:10%; animation-duration:12s}
+    .petal:nth-child(3){left:20%; animation-duration:16s}
+    .petal:nth-child(4){left:35%; animation-duration:19s}
+    .petal:nth-child(5){left:50%; animation-duration:15s}
+    .petal:nth-child(6){left:65%; animation-duration:17s}
+    .petal:nth-child(7){left:80%; animation-duration:13s}
+    .petal:nth-child(8){left:90%; animation-duration:20s}
+
+    .badge-soft{background:rgba(233,30,99,.12); color:var(--primary); border-radius:999px; padding:.45rem .75rem; font-weight:600}
+    .feature i{font-size:1.6rem}
+    .gallery img{border-radius:1rem; width:100%; height:280px; object-fit:cover}
+    .blur-bg{backdrop-filter: blur(8px); background:rgba(255,255,255,.4)}
+    [data-theme="dark"] .blur-bg{background:rgba(24,17,26,.5)}
+    .parallax{
+      background-image:url('https://images.unsplash.com/photo-1465101162946-4377e57745c3?q=80&w=1600&auto=format&fit=crop');
+      background-attachment: fixed; background-position:center; background-size:cover;
+      position:relative; color:white;
+    }
+    .parallax::before{content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,.25))}
+    .parallax > .container{position:relative; z-index:2}
+    .testi-avatar{width:56px; height:56px; border-radius:50%; object-fit:cover}
+    .footer{border-top:1px solid rgba(0,0,0,.05)}
+    [data-theme="dark"] .footer{border-color: rgba(255,255,255,.07)}
+    .form-control, .form-select{background:var(--bg-2); color:var(--text); border:1px solid rgba(0,0,0,.08)}
+
+    /* Back to top */
+    #backToTop{position:fixed; right:18px; bottom:18px; display:none; z-index:1050}
+
+    /* Tiny cart circle for demo */
+    .cart-count{position:absolute; top:-6px; right:-6px; background:var(--primary); color:#fff; font-size:.7rem; width:20px; height:20px; display:grid; place-items:center; border-radius:999px}
+
+    /* Mood pulse */
+    .mood-pulse{animation:mood 2.2s ease-in-out infinite}
+    @keyframes mood{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+  </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navMain" data-bs-smooth-scroll="true">
+  <!-- Floating petals for happy vibes -->
+  <div class="hero position-relative">
+    <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+    <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+    <!-- Navbar -->
+    <nav id="navMain" class="navbar navbar-expand-lg sticky-top blur-bg px-2" style="--bs-bg-opacity:.8;">
+      <div class="container">
+        <a class="navbar-brand brand" href="#home"><i class="fa-solid fa-seedling me-2"></i>Blossom</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-controls="navCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="#about">🌷About🌷</a></li>
+            <li class="nav-item"><a class="nav-link" href="#gallery">🌷Gallery🌷</a></li>
+            <li class="nav-item"><a class="nav-link" href="#shop">🌷Shop🌷</a></li>
+            <li class="nav-item"><a class="nav-link" href="#care">🌷Care🌷</a></li>
+            <li class="nav-item"><a class="nav-link" href="#blog">🌷Blog🌷</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">🌷Contact🌷</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-2">
+            <button id="themeToggle" class="btn btn-sm btn-outline-secondary" type="button"><i class="fa-solid fa-moon me-1"></i><span>Dark</span></button>
+            <a href="#shop" class="position-relative btn btn-sm btn-outline-primary"><i class="fa-solid fa-bag-shopping me-1"></i>Cart <span class="cart-count" id="cartCount">0</span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="home" class="section text-center">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-6 text-lg-start" data-aos="fade-right">
+            <span class="badge-soft">Mood Booster</span>
+            <h1 class="display-4 brand mt-3">Let Your Day <span class="text-decoration-underline" style="text-decoration-color:var(--primary)">Bloom</span></h1>
+            <p class="lead mt-3 text-muted">A bright, joyful flower world your screen with petals — perfect for turning a meh day into a good one.</p>
+            <div class="d-flex gap-2 justify-content-center justify-content-lg-start">
+              <a href="#gallery" class="btn btn-rose">See Gallery</a>
+              <a href="#shop" class="btn btn-outline-secondary">Explore Shop</a>
+            </div>
+            <div class="mt-4 small text-muted">Tip: Toggle dark mode for night-garden vibes 🌙</div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-left">
+            <div class="card p-3 mood-pulse">
+              <img class="rounded-4" src="my-hero_75bf62b1-d0ca-4844-9d0a-2b8cbb246b3a.webp" alt="Hero Flower"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6" data-aos="zoom-in">
+          <div class="card p-4">
+            <h2 class="brand">About Blossom</h2>
+            <p class="text-muted">🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺Blossom is a playful single‑file template using <strong>Bootstrap 5</strong>, vanilla <strong>JavaScript</strong>, and custom <strong>CSS</strong>.🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺</p>
+            <div class="row g-3 mt-1">
+              <div class="col-md-6 feature d-flex gap-3 align-items-start"><i class="fa-solid fa-burst mt-1"></i><div><strong>Petal Effects</strong><div class="text-muted">Floating petals and soft animations.</div></div></div>
+              <div class="col-md-6 feature d-flex gap-3 align-items-start"><i class="fa-solid fa-leaf mt-1"></i><div><strong>Dark Mode</strong><div class="text-muted">One click theme switch with memory.</div></div></div>
+              <div class="col-md-6 feature d-flex gap-3 align-items-start"><i class="fa-solid fa-bag-shopping mt-1"></i><div><strong>Demo Shop</strong><div class="text-muted">Cards, filters, and cart counter.</div></div></div>
+              <div class="col-md-6 feature d-flex gap-3 align-items-start"><i class="fa-solid fa-wand-magic-sparkles mt-1"></i><div><strong>Parallax</strong><div class="text-muted">Cozy in‑between hero section.</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6" data-aos="fade-up">
+          <div class="ratio ratio-16x9 card overflow-hidden">
+            <iframe src="Screen Recording 2025-08-23 090830.mp4" title="Flower timelapse" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Parallax Quote -->
+  <section class="parallax section text-center">
+    <div class="container">
+      <h2 class="brand mb-3">“Where flowers bloom, so does hope.”</h2>
+      <p class="lead">— Lady Bird Johnson</p>
+      <a href="#shop" class="btn btn-rose mt-3">Bloom Now</a>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" class="section">
+  <div class="container">
+    <div class="d-flex align-items-end justify-content-between mb-4">
+      <div>
+        <h2 class="brand mb-1">Gallery</h2>
+        <div class="text-muted">Hand-picked petals to cheer you up.</div>
+      </div>
+      <div>
+        <select id="gallerySelect" class="form-select form-select-sm">
+          <option value="all">All</option>
+          <option value="rose">Rose 🌹</option>
+          <option value="lily">Lily 🌸</option>
+          <option value="tulip">Tulip 🌷</option>
+          <option value="sunflower">Sunflower 🌻</option>
+          <option value="orchid">Orchid 💐</option>
+          <option value="daffodil">Daffodil 🌼</option>
+          <option value="marigold">Marigold 🌻</option>
+          <option value="lotus">Lotus 🌸</option>
+          <option value="jasmine">Jasmine 🌿🌼</option>
+          <option value="carnation">Carnation 🌺</option>
+          <option value="hibiscus">Hibiscus 🌺</option>
+          <option value="cherryblossom">Cherry Blossom 🌸</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row g-4 gallery">
+      <!-- Rose -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="rose">
+        <img src="photo-1586082207282-3dcb61d25ebd.jpeg" class="img-fluid rounded" alt="Rose 🌹">
+        <p class="text-center mt-2">Rose 🌹</p>
+      </div>
+      <!-- Lily -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="lily">
+        <img src="Lilium_longiflorum_(Easter_Lily).JPG" class="img-fluid rounded" alt="Lily 🌸">
+        <p class="text-center mt-2">Lily 🌸</p>
+      </div>
+      <!-- Tulip -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="tulip">
+        <img src="tulippink.jpg" class="img-fluid rounded" alt="Tulip 🌷">
+        <p class="text-center mt-2">Tulip 🌷</p>
+      </div>
+      <!-- Sunflower -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="sunflower">
+        <img src="pexels-brett-sayles-1322185_696x.webp" class="img-fluid rounded" alt="Sunflower 🌻">
+        <p class="text-center mt-2">Sunflower 🌻</p>
+      </div>
+      <!-- Orchid -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="orchid">
+        <img src="20160330033606_file_56fbf266bad7b.avif" class="img-fluid rounded" alt="Orchid 💐">
+        <p class="text-center mt-2">Orchid 💐</p>
+      </div>
+      <!-- Daffodil -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="daffodil">
+        <img src="634607286d95174c7c727af9-dutch-master-daffodil-100-bulbs-12-14.jpg" class="img-fluid rounded" alt="Daffodil 🌼">
+        <p class="text-center mt-2">Daffodil 🌼</p>
+      </div>
+      <!-- Marigold -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="marigold">
+        <img src="French-marigold.webp" class="img-fluid rounded" alt="Marigold 🌻">
+        <p class="text-center mt-2">Marigold 🌻</p>
+      </div>
+      <!-- Lotus -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="lotus">
+        <img src="images (4).jpeg" class="img-fluid rounded" alt="Lotus 🌸">
+        <p class="text-center mt-2">Lotus 🌸</p>
+      </div>
+      <!-- Jasmine -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="jasmine">
+        <img src="omega-blog11-Jasmine-incense-sticks-benefits-1.webp" class="img-fluid rounded" alt="Jasmine 🌿🌼">
+        <p class="text-center mt-2">Jasmine 🌿🌼</p>
+      </div>
+      <!-- Carnation -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="carnation">
+        <img src="red-carnation-flowers.webp" class="img-fluid rounded" alt="Carnation 🌺">
+        <p class="text-center mt-2">Carnation 🌺</p>
+      </div>
+      <!-- Hibiscus -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="hibiscus">
+        <img src="HibiscusRosa-1.webp" class="img-fluid rounded" alt="Hibiscus 🌺">
+        <p class="text-center mt-2">Hibiscus 🌺</p>
+      </div>
+      <!-- Cherry Blossom -->
+      <div class="col-6 col-md-4 col-lg-3" data-type="cherryblossom">
+        <img src="cherry-blossom-close-up-stockcake.jpg" class="img-fluid rounded" alt="Cherry Blossom 🌸">
+        <p class="text-center mt-2">Cherry Blossom 🌸</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Shop -->
+  <section id="shop" class="section">
+    <div class="container">
+      <div class="d-flex align-items-end justify-content-between mb-4">
+        <div>
+          <h2 class="brand mb-1">Flower Shop</h2>
+          <div class="text-muted">Add to mood (and cart) — demo only.</div>
+        </div>
+        <div class="d-flex gap-2">
+          <input id="searchInput" class="form-control form-control-sm" placeholder="Search flowers"/>
+          <select id="priceSelect" class="form-select form-select-sm">
+            <option value="all">All Prices</option>
+            <option value="low">Under $10</option>
+            <option value="mid">$10–$20</option>
+            <option value="high">$20+</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-4" id="shopGrid">
+        <!-- Template cards populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Care Guide -->
+  <section id="care" class="section">
+    <div class="container">
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-5" data-aos="fade-right">
+          <div class="card p-4 h-100">
+            <h2 class="brand">Flower Care Guide</h2>
+            <ol class="mt-3 text-muted">
+              <li>Trim stems at 45° and change water every 2–3 days.</li>
+              <li>Keep away from direct heat and harsh sunlight.</li>
+              <li>Add flower food (or a pinch of sugar + a drop of bleach).</li>
+              <li>Remove wilted leaves to prevent bacteria.</li>
+<li>Keep soil slightly moist and provide bright light.</li>
+<li>Allow foliage to die back naturally after blooming.</li>
+<li>Pinch off dead flowers to encourage more blooms.</li>
+<li>Grow in still, shallow water with full sunlight.</li>
+<li>Prune regularly to keep shape and promote new growth.</li>
+<li>Remove wilted flowers to extend blooming season.</li>
+<li>Water daily in summer; bring indoors in winter.</li>
+<li>Prune after flowering to keep branches healthy.</li>
+
+            </ol>
+            <a href="#contact" class="btn btn-rose mt-2">Ask a Florist</a>
+          </div>
+        </div>
+        <div class="col-lg-7" data-aos="fade-left">
+          <div class="card p-4 h-100">
+            <h3 class="brand mb-3">Watering Schedule</h3>
+            <div class="row g-3">
+              <div class="col-md-6"><div class="p-3 rounded-4 border h-100"><strong>Rose 🌹</strong><div class="text-muted">Top up daily, change water every other day.</div></div></div>
+              <div class="col-md-6"><div class="p-3 rounded-4 border h-100"><strong>Tulip 🌷</strong><div class="text-muted">Cool water, shorter stems (they grow!).</div></div></div>
+              <div class="col-md-6"><div class="p-3 rounded-4 border h-100"><strong>Sunflower 🌻</strong><div class="text-muted">Plenty of water; they drink a lot.</div></div></div>
+              <div class="col-md-6"><div class="p-3 rounded-4 border h-100"><strong>Orchid 💐</strong><div class="text-muted">Soak weekly; keep roots airy.</div></div></div>
+              <!-- Lily -->
+<div class="col-md-6">
+  <div class="p-3 rounded-4 border h-100"><strong>Lily 🌸</strong><div class="text-muted">Bright light; water when soil is dry.</div></div>
+</div>
+
+<!-- Daffodil -->
+<div class="col-md-6">
+  <div class="p-3 rounded-4 border h-100">
+    <strong>Daffodil 🌼</strong>
+    <div class="text-muted">Full sun; allow soil to dry between watering.</div>
+  </div>
+</div>
+
+<!-- Marigold -->
+<div class="col-md-6">
+  <div class="p-3 rounded-4 border h-100">
+    <strong>Marigold 🌻</strong>
+    <div class="text-muted">Thrives in sun; water moderately.</div>
+  </div>
+</div>
+
+<!-- Lotus -->
+<div class="col-md-6">
+  <div class="p-3 rounded-4 border h-100">
+    <strong>Lotus 🌸</strong>
+    <div class="text-muted">Needs still water; plenty of sunlight.</div>
+  </div>
+</div>
+
+<!-- Jasmine -->
+<div class="col-md-6">
+  <div class="p-3 rounded-4 border h-100">
+    <strong>Jasmine 🌿🌼</strong>
+    <div class="text-muted">Enjoys bright light; water regularly.</div>
+  </div>
+</div>
+
+<!-- Carnation -->
+<div class="col-md-6">
+  <div class="p-3 rounded-4 border h-100">
+    <strong>Carnation 🌺</strong>
+    <div class="text-muted">Keep in cool spot; water when dry.</div>
+  </div>
+</div>
+
+<!-- Hibiscus -->
+<div class="col-md-6">
+  <div class="p-3 rounded-4 border h-100">
+    <strong>Hibiscus 🌺</strong>
+    <div class="text-muted">Loves warmth; water daily in summer.</div>
+  </div>
+</div>
+
+<!-- Cherry Blossom -->
+<div class="col-md-6">
+  <div class="p-3 rounded-4 border h-100">
+    <strong>Cherry Blossom 🌸</strong>
+    <div class="text-muted">Plant in sun; prune after blooming.</div>
+  </div>
+</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog" class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4" data-aos="fade-up">
+          <div class="card p-4 h-100">
+            <span class="badge-soft mb-2">Tips</span>
+            <h3 class="brand">Make Bouquets Last Longer</h3>
+            <p class="text-muted">Mix 1 tsp sugar + 2 tsp lemon juice + a drop of bleach in 1 liter water to feed stems and fight bacteria.</p>
+            <a href="#contact" class="btn btn-outline-secondary">Read More</a>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="card p-4 h-100">
+            <span class="badge-soft mb-2">Inspiration</span>
+            <h3 class="brand">Colors that Lift Your Mood</h3>
+            <p class="text-muted">Warm pinks and sunny yellows stimulate joy, while greens provide a calming balance — try mixing them.</p>
+            <a href="#contact" class="btn btn-outline-secondary">Read More</a>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="card p-4 h-100">
+            <span class="badge-soft mb-2">DIY</span>
+            <h3 class="brand">Pressing Flowers at Home</h3>
+            <p class="text-muted">Place blooms between paper in a heavy book for 1–2 weeks — a timeless, low‑tech craft project.</p>
+            <a href="#contact" class="btn btn-outline-secondary">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-6" data-aos="fade-right">
+          <div class="card p-4 h-100">
+            <h2 class="brand">Contact Us</h2>
+            <form id="contactForm" class="mt-3">
+              <div class="row g-3">
+                <div class="col-md-6"><label class="form-label">Name</label><input class="form-control" required></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-control" required></div>
+                <div class="col-12"><label class="form-label">Subject</label><input class="form-control" required></div>
+                <div class="col-12"><label class="form-label">Message</label><textarea class="form-control" rows="5" required></textarea></div>
+                <div class="col-12 d-flex justify-content-between align-items-center">
+                  <div class="form-check"><input class="form-check-input" type="checkbox" id="newsletterCheck"><label class="form-check-label" for="newsletterCheck">Join newsletter</label></div>
+                  <button class="btn btn-rose" type="submit">Send Message</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-lg-6" data-aos="fade-left">
+          <div class="card p-0 overflow-hidden h-100">
+            <iframe title="map" style="border:0; width:100%; height:100%" loading="lazy" allowfullscreen src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7303.600701410292!2d90.3854!3d23.7509!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b0431d2a3f%3A0x2bb2d1f3d949fc7!2sDhanmondi%2C%20Dhaka!5e0!3m2!1sen!2sbd!4v1700000000000"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer py-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="brand">🌷Blossom🌷</h5>
+          <p class="text-muted">Built with 💗 to brighten your day. Free to use — just swap images/text and ship.</p>
+        </div>
+        <div class="col-md-2">
+          <h6>Sections</h6>
+          <ul class="list-unstyled small text-muted">
+            <li><a href="#about" class="link-secondary">About</a></li>
+            <li><a href="#gallery" class="link-secondary">Gallery</a></li>
+            <li><a href="#shop" class="link-secondary">Shop</a></li>
+            <li><a href="#care" class="link-secondary">Care</a></li>
+            <li><a href="#blog" class="link-secondary">Blog</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h6>Newsletter</h6>
+          <form id="newsletterForm" class="d-flex gap-2 mt-2">
+            <input type="email" id="newsletterEmail" class="form-control" placeholder="you@example.com" required>
+            <button class="btn btn-rose" type="submit">Join</button>
+          </form>
+          <div id="newsletterMsg" class="small mt-2 text-muted"></div>
+        </div>
+        <div class="col-md-3">
+          <h6>Follow</h6>
+          <div class="d-flex gap-3 fs-5">
+            <a class="link-secondary" href="#"><i class="fab fa-facebook"></i></a>
+            <a class="link-secondary" href="#"><i class="fab fa-instagram"></i></a>
+            <a class="link-secondary" href="#"><i class="fab fa-x-twitter"></i></a>
+            <a class="link-secondary" href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="text-center small text-muted mt-4">© <span id="year"></span> 🌷Blossom🌷. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button id="backToTop" class="btn btn-rose" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <!-- Bootstrap + libs -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    // ===== Mood‑lifting interactivity =====
+    const $ = (q, ctx=document)=>ctx.querySelector(q);
+    const $$ = (q, ctx=document)=>Array.from(ctx.querySelectorAll(q));
+
+    // Dark mode toggle with localStorage memory
+    const themeToggle = $('#themeToggle');
+    const savedTheme = localStorage.getItem('blossom-theme') || 'light';
+    if(savedTheme==='dark') document.documentElement.setAttribute('data-theme','dark');
+    themeToggle.querySelector('span').textContent = savedTheme==='dark' ? 'Light' : 'Dark';
+    themeToggle.addEventListener('click', ()=>{
+      const isDark = document.documentElement.getAttribute('data-theme')==='dark';
+      document.documentElement.setAttribute('data-theme', isDark? '' : 'dark');
+      localStorage.setItem('blossom-theme', isDark? 'light' : 'dark');
+      themeToggle.querySelector('span').textContent = isDark ? 'Dark' : 'Light';
+      themeToggle.firstElementChild.className = isDark ? 'fa-solid fa-moon me-1' : 'fa-solid fa-sun me-1';
+    });
+
+    // Floating back-to-top button
+    const backBtn = $('#backToTop');
+    window.addEventListener('scroll', ()=>{
+      backBtn.style.display = window.scrollY > 600 ? 'block' : 'none';
+    });
+    backBtn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+    // AOS animations
+    AOS.init({ once:true, duration:700, offset:80 });
+
+    // Gallery filtering
+    $('#gallerySelect').addEventListener('change', (e)=>{
+      const val = e.target.value;
+      $$('#gallery .gallery > div').forEach(card=>{
+        const show = (val==='all' || card.dataset.type===val);
+        card.style.display = show ? '' : 'none';
+      });
+    });
+
+    // Demo shop data
+    const PRODUCTS = [
+      {id:'p1', name:'Pink Rose Bouquet', price:18.99, tag:'Best Seller', img:'7_cbdeab88-0625-4bdf-9561-569262aff715.webp'},
+      {id:'p2', name:'Sunny Sunflowers', price:14.50, tag:'Trending', img:'SunflowerVase-STD_300x.webp'},
+      {id:'p3', name:'White Tulip Bunch', price:9.99, tag:'Budget', img:'whitetulips.webp'},
+      {id:'p4', name:'Orchid in Pot', price:24.00, tag:'Premium', img:'images (5).jpeg'},
+      {id:'p5', name:'Mixed Wildflowers', price:12.75, tag:'New', img:'Floret_Market-Bouquets-13.jpg'},
+      {id:'p6', name:'Lavender Bundle', price:8.50, tag:'Calming', img:'beautiful-lavender-bouquet-for-home-decor-free-photo.jpg'}
+    ];
+
+    const shopGrid = $('#shopGrid');
+    const cartCount = $('#cartCount');
+    let cart = 0;
+
+    function renderShop(list){
+      shopGrid.innerHTML = list.map(p=>`
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card h-100">
+            <img src="${p.img}" class="card-img-top" alt="${p.name}">
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title brand mb-0">${p.name}</h5>
+                <span class="badge-soft">${p.tag}</span>
+              </div>
+              <p class="card-text text-muted mb-3">A lovely pick to brighten spaces and lift moods instantly.</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center">
+                <strong>$${p.price.toFixed(2)}</strong>
+                <button class="btn btn-rose btn-sm" data-id="${p.id}"><i class="fa-solid fa-plus me-1"></i>Add</button>
+              </div>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
+    function applyFilters(){
+      const q = $('#searchInput').value.toLowerCase();
+      const price = $('#priceSelect').value;
+      const filtered = PRODUCTS.filter(p=>{
+        const matchQ = p.name.toLowerCase().includes(q);
+        const matchPrice = price==='all' || (price==='low' && p.price<10) || (price==='mid' && p.price>=10 && p.price<=20) || (price==='high' && p.price>20);
+        return matchQ && matchPrice;
+      });
+      renderShop(filtered);
+    }
+
+    // Initial render
+    renderShop(PRODUCTS);
+
+    // Search + price filters
+    $('#searchInput').addEventListener('input', applyFilters);
+    $('#priceSelect').addEventListener('change', applyFilters);
+
+    // Delegate add-to-cart
+    shopGrid.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-id]');
+      if(!btn) return;
+      cart++; cartCount.textContent = cart;
+      btn.innerHTML = '<i class="fa-solid fa-check me-1"></i>Added';
+      setTimeout(()=> btn.innerHTML = '<i class="fa-solid fa-plus me-1"></i>Add', 900);
+    });
+
+    // Newsletter (simple demo validation)
+    $('#newsletterForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const email = $('#newsletterEmail').value.trim();
+      const msg = $('#newsletterMsg');
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        msg.textContent = 'Please enter a valid email address.'; return;
+      }
+      msg.textContent = 'Thanks for joining! You just made the garden happier 🌸';
+      e.target.reset();
+    });
+
+    // Contact form (client-side only)
+    $('#contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      alert('Thanks for your message! A friendly florist will get back to you 🌷');
+      e.target.reset();
+    });
+
+    // Year
+    $('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
